@@ -32,10 +32,10 @@ export default {
     getQuery(val) {
       if (val) {
         store.params.query = val
-        console.log(val)
+        // console.log(val)
       } else {
         delete store.params.query
-        console.log('pera')
+        // console.log('pera')
       }
       this.getMoviesAndSeries()
     },

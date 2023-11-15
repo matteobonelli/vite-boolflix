@@ -13,7 +13,8 @@
             {{ originalName }}
         </div>
         <div>
-            {{ language }}
+            <div v-if="!store.supportedFlags.includes(language)">Flag not available</div>
+            <img v-else class="flag" :src="'/images/flag-' + language + '.png'" :alt="language">
         </div>
         <div>
             {{ rating }}
@@ -42,4 +43,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.flag {
+    width: 30px;
+}
+</style>
