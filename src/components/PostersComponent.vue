@@ -2,11 +2,11 @@
     <div class="col-12 col-md-4 col-lg-3 mb-5" @mouseover="hover = true" @mouseleave="hover = false">
         <div class="h-100" :class="{ 'd-none': hover }">
             <img v-if="image !== null" :src="store.imgUrl + image" :alt="title || name" class="w-100 h-100">
-            <div v-else class="d-flex justify-content-center align-items-center h-100">
+            <div v-else class="d-flex justify-content-center align-items-center">
                 <div>Image not found</div>
             </div>
         </div>
-        <div class="bg-black h-100 text-light" :class="{ 'd-block': hover, 'd-none': hover === false }">
+        <div class="bg-black text-light h-100" :class="{ 'd-block': hover, 'd-none': hover === false }">
             <div>
                 {{ name || title }}
             </div>
@@ -49,19 +49,11 @@ export default {
     },
     methods: {
         getRating() {
-            if (this.rating === 0) {
-                return this.vote = 0
-            } else if (this.rating > 0 && this.rating <= 2) {
-                return this.vote = 1
-            } else if (this.rating > 2 && this.rating <= 4) {
-                return this.vote = 2
-            } else if (this.rating > 4 && this.rating <= 6) {
-                return this.vote = 3
-            } else if (this.rating > 6 && this.rating <= 8) {
-                return this.vote = 4
-            } else if (this.rating > 8 && this.rating <= 10) {
-                return this.vote = 5
+            this.vote = Math.ceil(this.rating);
+            if (this.vote % 2 === 1) {
+                this.vote += 1;
             }
+            return this.vote
         }
     }
 }
