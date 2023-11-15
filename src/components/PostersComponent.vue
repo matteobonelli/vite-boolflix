@@ -1,14 +1,16 @@
 <template>
-    <div class="col-12 col-md-4 col-lg-3 mb-5">
-        <div class="h-100" @mouseover="hover = true" @mouseleave="hover = false" :class="{ 'd-none': hover }">
+    <div class="col-12 col-md-4 col-lg-3 mb-5" @mouseover="hover = true" @mouseleave="hover = false">
+        <div class="h-100" :class="{ 'd-none': hover }">
             <img v-if="image !== null" :src="store.imgUrl + image" :alt="title || name" class="w-100 h-100">
-            <div v-else>Image not found</div>
+            <div v-else class="d-flex justify-content-center align-items-center h-100">
+                <div>Image not found</div>
+            </div>
         </div>
         <div class="bg-black h-100 text-light" :class="{ 'd-block': hover, 'd-none': hover === false }">
             <div>
                 {{ name || title }}
             </div>
-            <div>
+            <div v-if="title !== originalTitle || name !== originalName">
                 {{ originalTitle || originalName }}
             </div>
             <div>
@@ -19,6 +21,7 @@
                 <i class="fa-solid fa-star" v-for="i in getRating()"></i>
                 <i class="fa-regular fa-star" v-for="i in (5 - getRating())"></i>
             </div>
+            <p>{{ overview }}</p>
         </div>
     </div>
 </template>
@@ -34,7 +37,8 @@ export default {
         originalTitle: String,
         originalName: String,
         language: String,
-        rating: Number
+        rating: Number,
+        overview: String
     },
     data() {
         return {

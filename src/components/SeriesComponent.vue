@@ -3,7 +3,8 @@
         <h2>TV Series</h2>
         <div class="row">
             <PostersComponent v-for="serie in store.seriesList" :name="serie.name" :image="serie.poster_path"
-                :original-name="serie.original_name" :rating="serie.vote_average" :language="serie.original_language" />
+                :original-name="serie.original_name" :rating="serie.vote_average" :language="serie.original_language"
+                :overview="serie.overview" />
         </div>
     </div>
 </template>
