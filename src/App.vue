@@ -42,12 +42,12 @@ export default {
     getMoviesAndSeries() {
       const movieurl = this.store.apiUrl + this.store.endpoint.movies;
       axios.get(movieurl, { params: this.store.params }).then((res) => {
-        // console.log(res.data.results)
+        console.log(res.data.results)
         this.store.movieList = res.data.results
       });
       const seriesurl = this.store.apiUrl + this.store.endpoint.series;
       axios.get(seriesurl, { params: this.store.params }).then((res) => {
-        // console.log(res.data.results)
+        console.log(res.data.results)
         this.store.seriesList = res.data.results
       })
     },

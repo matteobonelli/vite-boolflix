@@ -1,23 +1,22 @@
 <template>
     <div class="col-12 col-md-4 col-lg-3 mb-5">
         <div>
-            {{ name }}
+            {{ name || title }}
         </div>
         <div>
-            {{ title }}
-        </div>
-        <div>
-            {{ originalTitle }}
-        </div>
-        <div>
-            {{ originalName }}
+            {{ originalTitle || originalName }}
         </div>
         <div>
             <div v-if="!store.supportedFlags.includes(language)">Flag not available</div>
             <img v-else class="flag" :src="'/images/flag-' + language + '.png'" :alt="language">
         </div>
         <div>
-            {{ rating }}
+            <i class="fa-solid fa-star" v-for="i in getRating()"></i>
+            <i class="fa-regular fa-star" v-for="i in (5 - getRating())"></i>
+        </div>
+        <div class="h-100">
+            <img v-if="image !== null" :src="store.imgUrl + image" :alt="title || name" class="w-100">
+            <div v-else>Image not found</div>
         </div>
     </div>
 </template>
@@ -37,7 +36,25 @@ export default {
     },
     data() {
         return {
-            store
+            store,
+            vote: null
+        }
+    },
+    methods: {
+        getRating() {
+            if (this.rating === 0) {
+                return this.vote = 0
+            } else if (this.rating > 0 && this.rating <= 2) {
+                return this.vote = 1
+            } else if (this.rating > 2 && this.rating <= 4) {
+                return this.vote = 2
+            } else if (this.rating > 4 && this.rating <= 6) {
+                return this.vote = 3
+            } else if (this.rating > 6 && this.rating <= 8) {
+                return this.vote = 4
+            } else if (this.rating > 8 && this.rating <= 10) {
+                return this.vote = 5
+            }
         }
     }
 }
@@ -46,5 +63,9 @@ export default {
 <style lang="scss" scoped>
 .flag {
     width: 30px;
+}
+
+.fa-solid.fa-star {
+    color: gold;
 }
 </style>
