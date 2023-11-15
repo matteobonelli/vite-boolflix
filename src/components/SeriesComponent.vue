@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h2>TV Series</h2>
+        <h2 class="text-light display-3 fw-bold">TV Series</h2>
         <div class="row">
             <PostersComponent v-for="serie in store.seriesList" :name="serie.name" :image="serie.poster_path"
                 :original-name="serie.original_name" :rating="serie.vote_average" :language="serie.original_language"

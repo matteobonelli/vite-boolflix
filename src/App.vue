@@ -1,7 +1,7 @@
 <template>
   <HeaderComponent @search-movie="getQuery" />
   <main>
-    <section id="movies">
+    <section id="movies" class="mb-4">
       <MovieComponent />
     </section>
     <section id="series">
@@ -59,7 +59,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use './assets/styles/partials/variables' as *;
+
 main {
-  background-color: rgba($color: #000000, $alpha: 0.3)
+  background-color: $brand_primary;
+  padding: 20px 0;
 }
 </style>
