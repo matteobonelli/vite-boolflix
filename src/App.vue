@@ -58,4 +58,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+main {
+  background-color: rgba($color: #000000, $alpha: 0.3)
+}
+</style>
