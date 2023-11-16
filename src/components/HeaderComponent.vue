@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-black d-flex justify-content-between align-items-center">
-        <h1 class="text-danger display-2 fw-bold mx-4 text-uppercase">Boolflix</h1>
+    <div class="d-flex justify-content-between align-items-center bg-background">
+        <img src="images/netflix-logo.png" alt="neflix logo">
         <div class="d-flex">
             <input type="text" class="form-control" placeholder="Cerca il tuo film preferito!" v-model="search"
                 @keyup.enter="movieSearch">
@@ -10,23 +10,37 @@
 </template>
 
 <script>
+import { store } from '../assets/data/store'
 export default {
     name: 'HeaderComponent',
     data() {
         return {
-            search: ''
+            search: '',
+            store
         }
     },
     methods: {
         movieSearch() {
             this.$emit('search-movie', this.search);
             this.search = ''
-        }
+
+        },
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@use '../assets/styles/partials/variables' as *;
+
+.bg-background {
+    background-color: $brand_primary;
+    height: 80px;
+}
+
+img {
+    width: 200px;
+}
+
 .form-control {
     border-radius: 0;
 }

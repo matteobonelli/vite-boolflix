@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12 col-md-4 col-lg-3 mb-5 card-height" @mouseover="hover = true" @mouseleave="hover = false">
+    <div class="mb-5 card-poster" @mouseover="hover = true" @mouseleave="hover = false">
         <div class="h-100" :class="{ 'd-none': hover }">
             <img v-if="image !== null" :src="store.imgUrl + image" :alt="title || name" class="w-100 h-100">
             <div v-else class="d-flex justify-content-center align-items-center h-100">
@@ -33,7 +33,7 @@
                 <span v-if="serieid" v-for="actor in getActorsSeries.slice(0, 5)">{{ actor.name }}, </span>
             </div>
             <div class="mb-1">
-                <span class="fw-bold me-1">Genre:</span>
+                <span class="fw-bold me-1">Genere:</span>
                 <span v-for="genre in getGenreMovies" v-if="movieid">{{ genre.name }}, </span><span
                     v-for="genre in getGenreSeries" v-if="serieid">{{ genre.name }}, </span>
             </div>
@@ -133,7 +133,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-height {
+.card-poster {
+    min-width: 330px;
     height: 450px;
 
     &:hover {

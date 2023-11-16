@@ -5,6 +5,8 @@ export const store = reactive({
     endpoint: {
         movies: "search/movie",
         series: "search/tv",
+        popularMovies: "movie/popular",
+        popularSeries: "tv/popular",
         genreMovie: 'genre/movie/list',
         genreSeries: 'genre/tv/list'
     },
@@ -23,6 +25,6 @@ export const store = reactive({
     imgUrl: 'https://image.tmdb.org/t/p/w342',
     supportedFlags: ['de', 'en', 'es', 'fr', 'it', 'ja'],
     genreMovieList: [],
-    genreSeriesList: []
+    genreSeriesList: [],
 
 })

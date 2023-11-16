@@ -62,10 +62,20 @@ export default {
         this.store.genreSeriesList = res.data.genres
         console.log(this.store.genreSeriesList)
       });
+    },
+    getPopularFilmsAndSeries() {
+      const url = store.apiUrl + store.endpoint.popularMovies
+      const url2 = store.apiUrl + store.endpoint.popularSeries
+      axios.get(url, { params: store.params }).then((res) => {
+        this.store.movieList = res.data.results
+      });
+      axios.get(url2, { params: store.params }).then((res) => {
+        this.store.seriesList = res.data.results
+      });
     }
   },
   created() {
-    this.getMoviesAndSeries();
+    this.getPopularFilmsAndSeries();
     this.getGenres();
 
   }
@@ -76,6 +86,8 @@ export default {
 @use './assets/styles/partials/variables' as *;
 
 main {
+  overflow-y: auto;
+  height: calc(100vh - 80px);
   background-color: $brand_primary;
   padding: 20px 0;
 }
