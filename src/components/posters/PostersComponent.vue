@@ -32,8 +32,10 @@
                 <span v-if="movieid" v-for="actor in getActorsMovies.slice(0, 5)">{{ actor.name }}, </span>
                 <span v-if="serieid" v-for="actor in getActorsSeries.slice(0, 5)">{{ actor.name }}, </span>
             </div>
-            <div class="mt-4 mb-1">
-                <span class="fw-bold">ID:</span> {{ serieid || movieid }}
+            <div class="mb-1">
+                <span class="fw-bold me-1">Genre:</span>
+                <span v-for="genre in getGenreMovies" v-if="movieid">{{ genre.name }}, </span><span
+                    v-for="genre in getGenreSeries" v-if="serieid">{{ genre.name }}, </span>
             </div>
             <div class="mb-4">
                 <span class="fw-bold">Trama:</span>
@@ -46,7 +48,7 @@
 
 <script>
 import axios from 'axios'
-import { store } from '../assets/data/store'
+import { store } from '../../assets/data/store'
 export default {
     name: 'PostersComponent',
     props: {
@@ -59,7 +61,8 @@ export default {
         rating: Number,
         overview: String,
         serieid: Number,
-        movieid: Number
+        movieid: Number,
+        genreids: Array
 
     },
     data() {
@@ -67,7 +70,8 @@ export default {
             store,
             vote: null,
             hover: false,
-            actorsList: []
+            actorsList: [],
+            genreList: []
         }
     },
     methods: {
@@ -100,6 +104,28 @@ export default {
                 })
             }
             return this.actorsList
+        },
+        getGenreMovies() {
+            this.genreList = []
+            for (let i = 0; i < store.genreMovieList.length; i++) {
+                for (let g = 0; g < this.genreids.length; g++) {
+                    if (this.genreids[g] === store.genreMovieList[i].id) {
+                        this.genreList.push(store.genreMovieList[i])
+                    }
+                }
+            }
+            return this.genreList
+        },
+        getGenreSeries() {
+            this.genreList = []
+            for (let i = 0; i < store.genreSeriesList.length; i++) {
+                for (let g = 0; g < this.genreids.length; g++) {
+                    if (this.genreids[g] === store.genreSeriesList[i].id) {
+                        this.genreList.push(store.genreSeriesList[i])
+                    }
+                }
+            }
+            return this.genreList
         }
     }
 

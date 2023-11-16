@@ -5,10 +5,15 @@ export const store = reactive({
     endpoint: {
         movies: "search/movie",
         series: "search/tv",
+        genreMovie: 'genre/movie/list',
+        genreSeries: 'genre/tv/list'
     },
     params: {
         api_key: '79822ad1ecd0e1c275a39196556cb1e3',
         language: 'it-IT'
+    },
+    apiParam: {
+        api_key: '79822ad1ecd0e1c275a39196556cb1e3',
     },
 
     movieList: [],
@@ -17,5 +22,7 @@ export const store = reactive({
     loading: true,
     imgUrl: 'https://image.tmdb.org/t/p/w342',
     supportedFlags: ['de', 'en', 'es', 'fr', 'it', 'ja'],
+    genreMovieList: [],
+    genreSeriesList: []
 
 })

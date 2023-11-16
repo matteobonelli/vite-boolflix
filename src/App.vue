@@ -49,11 +49,25 @@ export default {
       axios.get(seriesurl, { params: this.store.params }).then((res) => {
         console.log(res.data.results)
         this.store.seriesList = res.data.results
-      })
+      });
     },
+    getGenres() {
+      const movieGenresUrl = this.store.apiUrl + this.store.endpoint.genreMovie;
+      axios.get(movieGenresUrl, { params: this.store.apiParam }).then((res) => {
+        this.store.genreMovieList = res.data.genres
+        console.log(this.store.genreMovieList)
+      });
+      const seriesGenresUrl = this.store.apiUrl + this.store.endpoint.genreSeries;
+      axios.get(seriesGenresUrl, { params: this.store.apiParam }).then((res) => {
+        this.store.genreSeriesList = res.data.genres
+        console.log(this.store.genreSeriesList)
+      });
+    }
   },
   created() {
     this.getMoviesAndSeries();
+    this.getGenres();
+
   }
 }
 </script>
