@@ -4,7 +4,7 @@
         <div class="row">
             <PostersComponent v-for="movie in store.movieList" :title="movie.title" :image="movie.poster_path"
                 :original-title="movie.original_title" :language="movie.original_language" :rating="movie.vote_average"
-                :overview="movie.overview" />
+                :overview="movie.overview" :movieid="movie.id" />
         </div>
     </div>
 </template>

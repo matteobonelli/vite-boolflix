@@ -22,10 +22,18 @@
                 </span>
 
             </div>
-            <div>
+            <div class="mb-1">
                 <span class="fw-bold me-2">Voto:</span>
-                <i class="fa-solid fa-star" v-for="i in getRating()"></i>
-                <i class="fa-regular fa-star" v-for="i in (5 - getRating())"></i>
+                <i class="fa-solid fa-star" v-for="i in getRating"></i>
+                <i class="fa-regular fa-star" v-for="i in (5 - getRating)"></i>
+            </div>
+            <div class="mb-1">
+                <span class="fw-bold me-2">Attori:</span>
+                <span v-if="movieid" v-for="actor in getActorsMovies.slice(0, 5)">{{ actor.name }}, </span>
+                <span v-if="serieid" v-for="actor in getActorsSeries.slice(0, 5)">{{ actor.name }}, </span>
+            </div>
+            <div class="mt-4 mb-1">
+                <span class="fw-bold">ID:</span> {{ serieid || movieid }}
             </div>
             <div class="mb-4">
                 <span class="fw-bold">Trama:</span>
@@ -37,6 +45,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { store } from '../assets/data/store'
 export default {
     name: 'PostersComponent',
@@ -48,32 +57,52 @@ export default {
         originalName: String,
         language: String,
         rating: Number,
-        overview: String
+        overview: String,
+        serieid: Number,
+        movieid: Number
+
     },
     data() {
         return {
             store,
             vote: null,
-            hover: false
+            hover: false,
+            actorsList: []
         }
     },
     methods: {
+
+
+    },
+    created() {
+
+    },
+    computed: {
         getRating() {
-            if (this.rating === 0) {
-                return this.vote = 0
-            } else if (this.rating > 0 && this.rating <= 2) {
-                return this.vote = 1
-            } else if (this.rating > 2 && this.rating <= 4) {
-                return this.vote = 2
-            } else if (this.rating > 4 && this.rating <= 6) {
-                return this.vote = 3
-            } else if (this.rating > 6 && this.rating <= 8) {
-                return this.vote = 4
-            } else if (this.rating > 8 && this.rating <= 10) {
-                return this.vote = 5
+            this.vote = Math.ceil(this.rating);
+            if (this.vote % 2 === 1) {
+                this.vote += 1;
             }
+            return this.vote / 2
+        },
+        getActorsMovies() {
+            if (this.movieid) {
+                axios.get(store.apiUrl + 'movie/' + this.movieid + '/credits', { params: store.params }).then((res) => {
+                    this.actorsList = res.data.cast
+                })
+            }
+            return this.actorsList
+        },
+        getActorsSeries() {
+            if (this.serieid) {
+                axios.get(store.apiUrl + 'tv/' + this.serieid + '/credits', { params: store.params }).then((res) => {
+                    this.actorsList = res.data.cast
+                })
+            }
+            return this.actorsList
         }
     }
+
 }
 </script>
 
