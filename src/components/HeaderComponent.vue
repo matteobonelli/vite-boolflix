@@ -1,10 +1,10 @@
 <template>
     <div class="d-flex justify-content-between align-items-center bg-background">
-        <img src="images/netflix-logo.png" alt="neflix logo">
+        <img src="images/netflix-logo.png" alt="neflix logo" @click="$emit('reloadPage')">
         <div class="d-flex">
             <input type="text" class="form-control" placeholder="Cerca il tuo film preferito!" v-model="search"
                 @keyup.enter="movieSearch">
-            <button class="btn btn-light me-4" @click="movieSearch">Search</button>
+            <button class="btn btn-light me-4" @click="movieSearch">Cerca</button>
         </div>
     </div>
 </template>
@@ -21,8 +21,15 @@ export default {
     },
     methods: {
         movieSearch() {
-            this.$emit('search-movie', this.search);
-            this.search = ''
+            if (this.search === '' || this.search.trim() === '') {
+                this.search = ''
+            } else {
+                this.$emit('search-movie', this.search);
+                this.search = ''
+                store.bestMovies = false
+                console.log(store.keyWord)
+            }
+
 
         },
     }
@@ -39,13 +46,29 @@ export default {
 
 img {
     width: 200px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .form-control {
     border-radius: 0;
 }
 
+input[type="text"],
+textarea {
+    background-color: $brand_primary;
+    color: white;
+}
+
+::placeholder {
+    color: white;
+}
+
 .btn {
     border-radius: 0;
+    background-color: $brand_secondary;
+    color: white;
 }
 </style>

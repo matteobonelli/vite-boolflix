@@ -26,5 +26,5 @@ export const store = reactive({
     supportedFlags: ['de', 'en', 'es', 'fr', 'it', 'ja'],
     genreMovieList: [],
     genreSeriesList: [],
-
+    bestMovies: false,
 })

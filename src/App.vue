@@ -1,16 +1,24 @@
 <template>
-  <HeaderComponent @search-movie="getQuery" />
+  <LoadingComponent v-if="loading" />
+  <HeaderComponent @search-movie="getQuery" @reload-page="getMainPage" />
   <main>
-    <section id="movies" class="mb-4">
-      <MovieComponent />
-    </section>
-    <section id="series">
-      <SeriesComponent />
-    </section>
+    <div v-if="!loading">
+      <section id="movies" class="mb-4" v-if="store.movieList.length > 0">
+        <MovieComponent />
+      </section>
+      <section id="series" v-if="store.seriesList.length > 0">
+        <SeriesComponent />
+      </section>
+      <div class="nofilm d-flex justify-content-center align-items-center"
+        v-if="store.movieList.length === 0 && store.seriesList.length === 0">
+        <h1 class="text-light">Non sono presenti Film o Serie TV!</h1>
+      </div>
+    </div>
   </main>
 </template>
 
 <script>
+import LoadingComponent from './components/LoadingComponent.vue'
 import SeriesComponent from './components/SeriesComponent.vue'
 import MovieComponent from './components/MovieComponent.vue'
 import HeaderComponent from './components/HeaderComponent.vue'
@@ -21,11 +29,13 @@ export default {
   components: {
     HeaderComponent,
     MovieComponent,
-    SeriesComponent
+    SeriesComponent,
+    LoadingComponent
   },
   data() {
     return {
       store,
+      loading: true
     }
   },
   methods: {
@@ -38,6 +48,9 @@ export default {
         // console.log('pera')
       }
       this.getMoviesAndSeries()
+    },
+    getMainPage() {
+      this.getPopularFilmsAndSeries()
     },
     getMoviesAndSeries() {
       const movieurl = this.store.apiUrl + this.store.endpoint.movies;
@@ -71,11 +84,16 @@ export default {
       });
       axios.get(url2, { params: store.params }).then((res) => {
         this.store.seriesList = res.data.results
+      }).catch((error) => {
+        console.log(error)
+      }).finally(() => {
+        this.loading = false
+        store.bestMovies = true
       });
     }
   },
   created() {
-    this.getPopularFilmsAndSeries();
+    this.getPopularFilmsAndSeries()
     this.getGenres();
 
   }
@@ -90,5 +108,10 @@ main {
   height: calc(100vh - 80px);
   background-color: $brand_primary;
   padding: 20px 0;
+}
+
+.nofilm {
+  height: calc(100vh - 160px);
+  ;
 }
 </style>
