@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-5 card-poster" @mouseover="hover = true" @mouseleave="hover = false">
+    <div class="card-poster" @mouseover="hover = true" @mouseleave="hover = false">
         <div class="card-inner">
             <div class="h-100 card-front">
                 <img v-if="image !== null" :src="store.imgUrl + image" :alt="title || name" class="w-100 h-100">
@@ -29,8 +29,7 @@
                 </div>
                 <div class="mb-1">
                     <span class="fw-bold me-2">Attori:</span>
-                    <span v-if="movieid" v-for="actor in getActorsMovies.slice(0, 5)">{{ actor.name }}, </span>
-                    <span v-if="serieid" v-for="actor in getActorsSeries.slice(0, 5)">{{ actor.name }}, </span>
+                    <span class="mb-1" v-for="actor in cast">{{ actor.name }}, </span>
                 </div>
                 <div class="mb-1">
                     <span class="fw-bold me-1">Genere:</span>
@@ -64,7 +63,8 @@ export default {
         overview: String,
         serieid: Number,
         movieid: Number,
-        genreids: Array
+        genreids: Array,
+        cast: Array
 
     },
     data() {
@@ -90,22 +90,6 @@ export default {
                 this.vote += 1;
             }
             return this.vote / 2
-        },
-        getActorsMovies() {
-            if (this.movieid) {
-                axios.get(store.apiUrl + 'movie/' + this.movieid + '/credits', { params: store.params }).then((res) => {
-                    this.actorsList = res.data.cast
-                })
-            }
-            return this.actorsList
-        },
-        getActorsSeries() {
-            if (this.serieid) {
-                axios.get(store.apiUrl + 'tv/' + this.serieid + '/credits', { params: store.params }).then((res) => {
-                    this.actorsList = res.data.cast
-                })
-            }
-            return this.actorsList
         },
         getGenreMovies() {
             this.genreList = []
@@ -137,7 +121,7 @@ export default {
 <style lang="scss" scoped>
 .card-poster {
     background-color: transparent;
-    min-width: 330px;
+    min-width: 320px;
     height: 450px;
     perspective: 1000px;
 
