@@ -1,11 +1,15 @@
 <template>
     <div class="d-flex justify-content-between align-items-center bg-background">
-        <img src="images/netflix-logo.png" alt="neflix logo" @click="$emit('reloadPage')">
+        <img src="images/netflix-logo.png" alt="neflix logo" @click="$emit('reloadPage'), this.genreSelected = ''">
         <div class="d-flex align-items-center">
-            <select name="genres" id="genres" @change="filterGenre" v-model="genreSelected">
-                <option value="">All</option>
-                <option v-for="genre in store.genreList" :value="genre.id" :key="genre.id">{{ genre.name }}</option>
-            </select>
+            <div>
+                <select class="form-select" name="genres" id="genres" @change="filterGenre" v-model="genreSelected">
+                    <option value="">Seleziona il tuo genere preferito!</option>
+                    <option value="all">All</option>
+                    <option v-for="genre in store.genreList" :value="genre.id" :key="genre.id">{{ genre.name }}</option>
+                </select>
+            </div>
+
             <input type="text" class="form-control" placeholder="Cerca il tuo film preferito!" v-model="search"
                 @keyup.enter="movieSearch">
             <button class="btn btn-light me-4" @click="movieSearch">Cerca</button>
@@ -34,12 +38,13 @@ export default {
                 this.search = ''
                 store.bestMovies = false
                 console.log(store.keyWord)
+                this.genreSelected = ''
             }
 
 
         },
         filterGenre() {
-            if (this.genreSelected === '') {
+            if (this.genreSelected === 'all') {
                 const url = store.apiUrl + store.endpoint.popularMovies
                 const url2 = store.apiUrl + store.endpoint.popularSeries
                 axios.get(url, { params: store.params }).then((res) => {
@@ -58,6 +63,8 @@ export default {
                     this.loading = false
                     store.bestMovies = true
                 });
+            } else if (this.genreSelected === '') {
+                return
             } else {
                 const url = store.apiUrl + store.endpoint.discoverMovie
                 const url2 = store.apiUrl + store.endpoint.discoverSeries
@@ -100,14 +107,25 @@ img {
     }
 }
 
+.form-select,
 .form-control {
     border-radius: 0;
 }
 
 input[type="text"],
-textarea {
+textarea,
+select {
     background-color: $brand_primary;
     color: white;
+}
+
+input {
+    width: 300px;
+    margin-left: 40px;
+}
+
+label {
+    display: block;
 }
 
 ::placeholder {
@@ -118,12 +136,5 @@ textarea {
     border-radius: 0;
     background-color: $brand_secondary;
     color: white;
-}
-
-select {
-    height: 100%;
-    min-width: 180px;
-    z-index: 100;
-    margin-right: 30px;
 }
 </style>
