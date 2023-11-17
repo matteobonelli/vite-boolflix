@@ -60,8 +60,6 @@ export default {
         language: String,
         rating: Number,
         overview: String,
-        serieid: Number,
-        movieid: Number,
         genreids: Array,
         cast: Array
 
