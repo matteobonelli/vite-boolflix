@@ -1,19 +1,23 @@
 <template>
     <div class="d-flex justify-content-between align-items-center bg-background">
-        <img src="images/netflix-logo.png" alt="neflix logo" @click="$emit('reloadPage'), this.genreSelected = ''">
         <div class="d-flex align-items-center">
+            <img src="images/netflix-logo.png" alt="neflix logo" @click="$emit('reloadPage'), this.genreSelected = ''">
             <div>
-                <select class="form-select" name="genres" id="genres" @change="filterGenre" v-model="genreSelected">
+                <select class="form-select" name="genres" id="genres" @change="$emit('filterGenre', genreSelected)"
+                    v-model="genreSelected">
                     <option value="">Seleziona il tuo genere preferito!</option>
                     <option value="all">All</option>
                     <option v-for="genre in store.genreList" :value="genre.id" :key="genre.id">{{ genre.name }}</option>
                 </select>
             </div>
+        </div>
 
+        <div class="d-flex">
             <input type="text" class="form-control" placeholder="Cerca il tuo film preferito!" v-model="search"
                 @keyup.enter="movieSearch">
             <button class="btn btn-light me-4" @click="movieSearch">Cerca</button>
         </div>
+
     </div>
 </template>
 
@@ -43,50 +47,6 @@ export default {
 
 
         },
-        filterGenre() {
-            if (this.genreSelected === 'all') {
-                const url = store.apiUrl + store.endpoint.popularMovies
-                const url2 = store.apiUrl + store.endpoint.popularSeries
-                axios.get(url, { params: store.params }).then((res) => {
-                    this.store.movieList = res.data.results
-                }).catch((error) => {
-                    console.log(error)
-                }).finally(() => {
-                    this.loading = false
-                    store.bestMovies = true
-                });
-                axios.get(url2, { params: store.params }).then((res) => {
-                    this.store.seriesList = res.data.results
-                }).catch((error) => {
-                    console.log(error)
-                }).finally(() => {
-                    this.loading = false
-                    store.bestMovies = true
-                });
-            } else if (this.genreSelected === '') {
-                return
-            } else {
-                const url = store.apiUrl + store.endpoint.discoverMovie
-                const url2 = store.apiUrl + store.endpoint.discoverSeries
-                const api_key = '79822ad1ecd0e1c275a39196556cb1e3'
-                axios.get(url + '?with_genres=' + this.genreSelected + '&api_key=' + api_key).then((res) => {
-                    this.store.movieList = res.data.results
-                }).catch((error) => {
-                    console.log(error)
-                }).finally(() => {
-                    this.loading = false
-                    store.bestMovies = true
-                });
-                axios.get(url2 + '?with_genres=' + this.genreSelected + '&api_key=' + api_key).then((res) => {
-                    this.store.seriesList = res.data.results
-                }).catch((error) => {
-                    console.log(error)
-                }).finally(() => {
-                    this.loading = false
-                    store.bestMovies = true
-                });
-            }
-        }
     }
 }
 </script>
@@ -101,6 +61,7 @@ export default {
 
 img {
     width: 200px;
+    margin-right: 40px;
 
     &:hover {
         cursor: pointer;
@@ -121,7 +82,6 @@ select {
 
 input {
     width: 300px;
-    margin-left: 40px;
 }
 
 label {

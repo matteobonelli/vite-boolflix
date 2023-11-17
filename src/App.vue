@@ -1,6 +1,6 @@
 <template>
   <LoadingComponent v-if="loading" />
-  <HeaderComponent @search-movie="getQuery" @reload-page="getMainPage" />
+  <HeaderComponent @search-movie="getQuery" @reload-page="getMainPage" @filter-genre="filterGenres" />
   <main>
     <div v-if="!loading">
       <section id="movies" class="mb-4" v-if="store.movieList.length > 0">
@@ -39,7 +39,37 @@ export default {
     }
   },
   methods: {
+    filterGenres(val) {
+      if (val === 'all') {
+        this.loading = true
+        this.getPopularFilmsAndSeries()
+      } else if (val === '') {
+        return
+      } else {
+        this.loading = true
+        const url = store.apiUrl + store.endpoint.discoverMovie
+        const url2 = store.apiUrl + store.endpoint.discoverSeries
+        const api_key = '79822ad1ecd0e1c275a39196556cb1e3'
+        axios.get(url + '?with_genres=' + val + '&api_key=' + api_key).then((res) => {
+          this.store.movieList = res.data.results
+        }).catch((error) => {
+          console.log(error)
+        }).finally(() => {
+          this.loading = false
+          store.bestMovies = true
+        });
+        axios.get(url2 + '?with_genres=' + val + '&api_key=' + api_key).then((res) => {
+          this.store.seriesList = res.data.results
+        }).catch((error) => {
+          console.log(error)
+        }).finally(() => {
+          this.loading = false
+          store.bestMovies = true
+        });
+      }
+    },
     getQuery(val) {
+      this.loading = true
       if (val) {
         store.params.query = val
         // console.log(val)
@@ -50,6 +80,7 @@ export default {
       this.getMoviesAndSeries()
     },
     getMainPage() {
+      this.loading = true
       this.getPopularFilmsAndSeries()
     },
     getMoviesAndSeries() {
