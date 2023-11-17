@@ -33,8 +33,7 @@
                 </div>
                 <div class="mb-1">
                     <span class="fw-bold me-1">Genere:</span>
-                    <span v-for="genre in getGenreMovies" v-if="movieid">{{ genre.name }}, </span><span
-                        v-for="genre in getGenreSeries" v-if="serieid">{{ genre.name }}, </span>
+                    <span v-for="genre in getGenreId">{{ genre.name }}, </span>
                 </div>
                 <div class="mb-4">
                     <span class="fw-bold">Trama:</span>
@@ -78,7 +77,6 @@ export default {
     },
     methods: {
 
-
     },
     created() {
 
@@ -91,28 +89,18 @@ export default {
             }
             return this.vote / 2
         },
-        getGenreMovies() {
+        getGenreId() {
             this.genreList = []
-            for (let i = 0; i < store.genreMovieList.length; i++) {
+            for (let i = 0; i < store.genreList.length; i++) {
                 for (let g = 0; g < this.genreids.length; g++) {
-                    if (this.genreids[g] === store.genreMovieList[i].id) {
-                        this.genreList.push(store.genreMovieList[i])
+                    if (this.genreids[g] === store.genreList[i].id) {
+                        this.genreList.push(store.genreList[i])
                     }
                 }
             }
+            console.log(this.genreList)
             return this.genreList
         },
-        getGenreSeries() {
-            this.genreList = []
-            for (let i = 0; i < store.genreSeriesList.length; i++) {
-                for (let g = 0; g < this.genreids.length; g++) {
-                    if (this.genreids[g] === store.genreSeriesList[i].id) {
-                        this.genreList.push(store.genreSeriesList[i])
-                    }
-                }
-            }
-            return this.genreList
-        }
     }
 
 }

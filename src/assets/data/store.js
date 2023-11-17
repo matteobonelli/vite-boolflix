@@ -27,4 +27,5 @@ export const store = reactive({
     genreMovieList: [],
     genreSeriesList: [],
     bestMovies: false,
+    genreList: []
 })

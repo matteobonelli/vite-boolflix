@@ -1,7 +1,13 @@
 <template>
     <div class="container mb-5">
-        <h2 class="text-light display-3 fw-bold mb-3" v-if="store.bestMovies">Migliori Film</h2>
-        <h2 class="text-light display-3 fw-bold mb-3" v-else>Film</h2>
+        <div class="d-flex justify-content-between align-items-center ">
+            <div>
+                <h2 class="text-light display-3 fw-bold mb-3" v-if="store.bestMovies">Migliori Film</h2>
+                <h2 class="text-light display-3 fw-bold mb-3" v-else>Film</h2>
+            </div>
+        </div>
+
+
         <div class="d-flex justify-content-center flex-wrap">
             <PostersComponent v-for="movie in store.movieList" @mouseover="getActorsMovies(movie)" :title="movie.title"
                 :image="movie.poster_path" :original-title="movie.original_title" :language="movie.original_language"
@@ -24,7 +30,7 @@ export default {
         return {
             store,
             picked: '',
-            actors: []
+            actors: [],
         }
     },
     methods: {
@@ -55,7 +61,7 @@ export default {
                 console.log(movie)
             })
 
-        }
+        },
     }
 }
 </script>

@@ -1,7 +1,11 @@
 <template>
     <div class="d-flex justify-content-between align-items-center bg-background">
         <img src="images/netflix-logo.png" alt="neflix logo" @click="$emit('reloadPage')">
-        <div class="d-flex">
+        <div class="d-flex align-items-center">
+            <select name="genres" id="genres">
+                <option value="">All</option>
+                <option v-for="genre in store.genreList" :value="genre.name" :key="genre.id">{{ genre.name }}</option>
+            </select>
             <input type="text" class="form-control" placeholder="Cerca il tuo film preferito!" v-model="search"
                 @keyup.enter="movieSearch">
             <button class="btn btn-light me-4" @click="movieSearch">Cerca</button>
@@ -70,5 +74,12 @@ textarea {
     border-radius: 0;
     background-color: $brand_secondary;
     color: white;
+}
+
+select {
+    height: 100%;
+    min-width: 180px;
+    z-index: 100;
+    margin-right: 30px;
 }
 </style>

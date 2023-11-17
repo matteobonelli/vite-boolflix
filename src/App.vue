@@ -53,34 +53,66 @@ export default {
       this.getPopularFilmsAndSeries()
     },
     getMoviesAndSeries() {
+      this.loading = true
       const movieurl = this.store.apiUrl + this.store.endpoint.movies;
       axios.get(movieurl, { params: this.store.params }).then((res) => {
         console.log(res.data.results)
         this.store.movieList = res.data.results
+      }).catch((error) => {
+        console.log(error)
+      }).finally(() => {
+        this.loading = false
+        store.bestMovies = true
       });
+      this.loading = true
       const seriesurl = this.store.apiUrl + this.store.endpoint.series;
       axios.get(seriesurl, { params: this.store.params }).then((res) => {
         console.log(res.data.results)
         this.store.seriesList = res.data.results
+      }).catch((error) => {
+        console.log(error)
+      }).finally(() => {
+        this.loading = false
+        store.bestMovies = true
       });
     },
-    getGenres() {
+    getGenresMovies() {
       const movieGenresUrl = this.store.apiUrl + this.store.endpoint.genreMovie;
-      axios.get(movieGenresUrl, { params: this.store.apiParam }).then((res) => {
-        this.store.genreMovieList = res.data.genres
-        console.log(this.store.genreMovieList)
-      });
-      const seriesGenresUrl = this.store.apiUrl + this.store.endpoint.genreSeries;
-      axios.get(seriesGenresUrl, { params: this.store.apiParam }).then((res) => {
-        this.store.genreSeriesList = res.data.genres
-        console.log(this.store.genreSeriesList)
-      });
+      return axios.get(movieGenresUrl, { params: this.store.apiParam })
     },
+
+    getGenresSeries() {
+      const seriesGenresUrl = this.store.apiUrl + this.store.endpoint.genreSeries;
+      return axios.get(seriesGenresUrl, { params: this.store.apiParam })
+    },
+
+    getGenreList() {
+      for (let i = 0; i < store.genreMovieList.length; i++) {
+        store.genreList.push(store.genreMovieList[i])
+      }
+      for (let g = 0; g < store.genreSeriesList.length; g++) {
+        for (let c = 0; c < store.genreList.length; c++) {
+          if (store.genreSeriesList[g].id === store.genreList[c].id) {
+            store.genreSeriesList.splice(g, 1)
+          }
+        }
+      }
+      for (let j = 0; j < store.genreSeriesList.length; j++) {
+        store.genreList.push(store.genreSeriesList[j])
+      }
+      console.log(store.genreList)
+    },
+
     getPopularFilmsAndSeries() {
       const url = store.apiUrl + store.endpoint.popularMovies
       const url2 = store.apiUrl + store.endpoint.popularSeries
       axios.get(url, { params: store.params }).then((res) => {
         this.store.movieList = res.data.results
+      }).catch((error) => {
+        console.log(error)
+      }).finally(() => {
+        this.loading = false
+        store.bestMovies = true
       });
       axios.get(url2, { params: store.params }).then((res) => {
         this.store.seriesList = res.data.results
@@ -92,9 +124,16 @@ export default {
       });
     }
   },
+  mounted() {
+
+  },
   created() {
     this.getPopularFilmsAndSeries()
-    this.getGenres();
+    Promise.all([this.getGenresMovies(), this.getGenresSeries()]).then((res) => {
+      console.log(res[0].data.genres)
+      store.genreMovieList = res[0].data.genres
+      store.genreSeriesList = res[1].data.genres
+    }).finally(this.getGenreList)
 
   }
 }
