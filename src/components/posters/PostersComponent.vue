@@ -98,7 +98,7 @@ export default {
                     }
                 }
             }
-            console.log(this.genreList)
+            // console.log(this.genreList)
             return this.genreList
         },
     }

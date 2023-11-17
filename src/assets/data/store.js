@@ -8,7 +8,9 @@ export const store = reactive({
         popularMovies: "movie/popular",
         popularSeries: "tv/popular",
         genreMovie: 'genre/movie/list',
-        genreSeries: 'genre/tv/list'
+        genreSeries: 'genre/tv/list',
+        discoverMovie: 'discover/movie',
+        discoverSeries: 'discover/tv',
     },
     params: {
         api_key: '79822ad1ecd0e1c275a39196556cb1e3',

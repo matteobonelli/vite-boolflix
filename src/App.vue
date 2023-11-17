@@ -56,7 +56,7 @@ export default {
       this.loading = true
       const movieurl = this.store.apiUrl + this.store.endpoint.movies;
       axios.get(movieurl, { params: this.store.params }).then((res) => {
-        console.log(res.data.results)
+        // console.log(res.data.results)
         this.store.movieList = res.data.results
       }).catch((error) => {
         console.log(error)
@@ -67,7 +67,7 @@ export default {
       this.loading = true
       const seriesurl = this.store.apiUrl + this.store.endpoint.series;
       axios.get(seriesurl, { params: this.store.params }).then((res) => {
-        console.log(res.data.results)
+        // console.log(res.data.results)
         this.store.seriesList = res.data.results
       }).catch((error) => {
         console.log(error)
@@ -100,7 +100,7 @@ export default {
       for (let j = 0; j < store.genreSeriesList.length; j++) {
         store.genreList.push(store.genreSeriesList[j])
       }
-      console.log(store.genreList)
+      // console.log(store.genreList)
     },
 
     getPopularFilmsAndSeries() {
@@ -130,7 +130,7 @@ export default {
   created() {
     this.getPopularFilmsAndSeries()
     Promise.all([this.getGenresMovies(), this.getGenresSeries()]).then((res) => {
-      console.log(res[0].data.genres)
+      // console.log(res[0].data.genres)
       store.genreMovieList = res[0].data.genres
       store.genreSeriesList = res[1].data.genres
     }).finally(this.getGenreList)

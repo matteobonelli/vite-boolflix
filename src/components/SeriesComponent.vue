@@ -49,8 +49,8 @@ export default {
                 }
                 serie.cast = serie.cast.slice(0, 5)
 
-                console.log(serie.cast)
-                console.log(serie)
+                // console.log(serie.cast)
+                // console.log(serie)
             })
 
         }

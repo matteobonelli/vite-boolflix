@@ -57,8 +57,8 @@ export default {
                 }
                 movie.cast = movie.cast.slice(0, 5)
 
-                console.log(movie.cast)
-                console.log(movie)
+                // console.log(movie.cast)
+                // console.log(movie)
             })
 
         },

@@ -2,9 +2,9 @@
     <div class="d-flex justify-content-between align-items-center bg-background">
         <img src="images/netflix-logo.png" alt="neflix logo" @click="$emit('reloadPage')">
         <div class="d-flex align-items-center">
-            <select name="genres" id="genres">
+            <select name="genres" id="genres" @change="filterGenre" v-model="genreSelected">
                 <option value="">All</option>
-                <option v-for="genre in store.genreList" :value="genre.name" :key="genre.id">{{ genre.name }}</option>
+                <option v-for="genre in store.genreList" :value="genre.id" :key="genre.id">{{ genre.name }}</option>
             </select>
             <input type="text" class="form-control" placeholder="Cerca il tuo film preferito!" v-model="search"
                 @keyup.enter="movieSearch">
@@ -14,13 +14,15 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { store } from '../assets/data/store'
 export default {
     name: 'HeaderComponent',
     data() {
         return {
             search: '',
-            store
+            store,
+            genreSelected: ''
         }
     },
     methods: {
@@ -36,6 +38,48 @@ export default {
 
 
         },
+        filterGenre() {
+            if (this.genreSelected === '') {
+                const url = store.apiUrl + store.endpoint.popularMovies
+                const url2 = store.apiUrl + store.endpoint.popularSeries
+                axios.get(url, { params: store.params }).then((res) => {
+                    this.store.movieList = res.data.results
+                }).catch((error) => {
+                    console.log(error)
+                }).finally(() => {
+                    this.loading = false
+                    store.bestMovies = true
+                });
+                axios.get(url2, { params: store.params }).then((res) => {
+                    this.store.seriesList = res.data.results
+                }).catch((error) => {
+                    console.log(error)
+                }).finally(() => {
+                    this.loading = false
+                    store.bestMovies = true
+                });
+            } else {
+                const url = store.apiUrl + store.endpoint.discoverMovie
+                const url2 = store.apiUrl + store.endpoint.discoverSeries
+                const api_key = '79822ad1ecd0e1c275a39196556cb1e3'
+                axios.get(url + '?with_genres=' + this.genreSelected + '&api_key=' + api_key).then((res) => {
+                    this.store.movieList = res.data.results
+                }).catch((error) => {
+                    console.log(error)
+                }).finally(() => {
+                    this.loading = false
+                    store.bestMovies = true
+                });
+                axios.get(url2 + '?with_genres=' + this.genreSelected + '&api_key=' + api_key).then((res) => {
+                    this.store.seriesList = res.data.results
+                }).catch((error) => {
+                    console.log(error)
+                }).finally(() => {
+                    this.loading = false
+                    store.bestMovies = true
+                });
+            }
+        }
     }
 }
 </script>
