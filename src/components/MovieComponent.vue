@@ -9,9 +9,10 @@
 
 
         <div class="d-flex justify-content-center flex-wrap">
-            <PostersComponent v-for="movie in store.movieList" @mouseover="getActorsMovies(movie)" :title="movie.title"
-                :image="movie.poster_path" :original-title="movie.original_title" :language="movie.original_language"
-                :rating="movie.vote_average" :overview="movie.overview" :genreids="movie.genre_ids" :cast="movie.cast" />
+            <PostersComponent v-for="movie in store.movieList" @mouseover="getActorsMovies(movie)"
+                @click="$emit('playVideom', movie.id)" :title="movie.title" :image="movie.poster_path"
+                :original-title="movie.original_title" :language="movie.original_language" :rating="movie.vote_average"
+                :overview="movie.overview" :genreids="movie.genre_ids" :cast="movie.cast" />
         </div>
     </div>
 </template>
@@ -56,7 +57,7 @@ export default {
                 }
                 movie.cast = movie.cast.slice(0, 5)
 
-                // console.log(movie.cast)
+                console.log(movie.id)
                 // console.log(movie)
             })
 

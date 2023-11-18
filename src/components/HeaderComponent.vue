@@ -41,7 +41,6 @@ export default {
                 this.$emit('search-movie', this.search);
                 this.search = ''
                 store.bestMovies = false
-                console.log(store.keyWord)
                 this.genreSelected = ''
             }
 
@@ -80,9 +79,7 @@ select {
     color: white;
 }
 
-input {
-    width: 300px;
-}
+
 
 label {
     display: block;

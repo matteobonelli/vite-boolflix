@@ -3,10 +3,10 @@
         <h2 class="text-light display-3 fw-bold mb-3" v-if="store.bestMovies">Migliori Serie TV</h2>
         <h2 class="text-light display-3 fw-bold mb-3" v-else>Serie TV</h2>
         <div class="d-flex justify-content-center flex-wrap">
-            <PostersComponent v-for="serie in store.seriesList" @mouseover="getActorsSeries(serie)" :name="serie.name"
-                :image="serie.poster_path" :original-name="serie.original_name" :rating="serie.vote_average"
-                :language="serie.original_language" :overview="serie.overview" :genreids="serie.genre_ids"
-                :cast="serie.cast" />
+            <PostersComponent v-for="serie in store.seriesList" @mouseover="getActorsSeries(serie)"
+                @click="$emit('playVideos', serie.id)" :name="serie.name" :image="serie.poster_path"
+                :original-name="serie.original_name" :rating="serie.vote_average" :language="serie.original_language"
+                :overview="serie.overview" :genreids="serie.genre_ids" :cast="serie.cast" />
         </div>
     </div>
 </template>
