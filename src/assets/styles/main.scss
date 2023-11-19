@@ -8,3 +8,12 @@ $fa-font-path: '../webfonts';
 @import '@fortawesome/fontawesome-free/scss/brands.scss';
 @import 'bootstrap/scss/bootstrap';
 @import url('https://fonts.googleapis.com/css2?family=Martel+Sans:wght@400;600&display=swap');
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #717171;
+    border-radius: 10px;
+}

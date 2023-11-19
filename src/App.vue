@@ -79,20 +79,15 @@ export default {
         store.videoOn = false
         this.youtubeKey = ''
         this.loading = true
-        const url = store.apiUrl + store.endpoint.discoverMovie
-        const url2 = store.apiUrl + store.endpoint.discoverSeries
+        let endpoints = [
+          store.apiUrl + store.endpoint.discoverMovie,
+          store.apiUrl + store.endpoint.discoverSeries
+        ]
         const api_key = '79822ad1ecd0e1c275a39196556cb1e3'
-        axios.get(url + '?with_genres=' + val + '&api_key=' + api_key).then((res) => {
-          this.store.movieList = res.data.results
-        }).catch((error) => {
-          console.log(error)
-        }).finally(() => {
-          this.loading = false
-          store.bestMovies = false
-        });
-        axios.get(url2 + '?with_genres=' + val + '&api_key=' + api_key).then((res) => {
-          this.store.seriesList = res.data.results
-        }).catch((error) => {
+        axios.all(endpoints.map((endpoint) => axios.get(endpoint + '?with_genres=' + val + '&api_key=' + api_key))).then(axios.spread((movieGenres, seriesGenres) => {
+          store.movieList = movieGenres.data.results
+          store.seriesList = seriesGenres.data.results
+        })).catch((error) => {
           console.log(error)
         }).finally(() => {
           this.loading = false
@@ -152,22 +147,14 @@ export default {
       store.videoOn = false
       this.youtubeKey = ''
       this.loading = true
-      const movieurl = this.store.apiUrl + this.store.endpoint.movies;
-      axios.get(movieurl, { params: this.store.params }).then((res) => {
-        // console.log(res.data.results)
-        this.store.movieList = res.data.results
-      }).catch((error) => {
-        console.log(error)
-      }).finally(() => {
-        this.loading = false
-        store.bestMovies = false
-      });
-      this.loading = true
-      const seriesurl = this.store.apiUrl + this.store.endpoint.series;
-      axios.get(seriesurl, { params: this.store.params }).then((res) => {
-        // console.log(res.data.results)
-        this.store.seriesList = res.data.results
-      }).catch((error) => {
+      let endpoints = [
+        this.store.apiUrl + this.store.endpoint.movies,
+        this.store.apiUrl + this.store.endpoint.series,
+      ]
+      axios.all(endpoints.map((endpoint) => axios.get(endpoint, { params: store.params }))).then(axios.spread((movies, series) => {
+        store.movieList = movies.data.results
+        store.seriesList = series.data.results
+      })).catch((error) => {
         console.log(error)
       }).finally(() => {
         this.loading = false
@@ -176,12 +163,14 @@ export default {
     },
     getGenresMovies() {
       const movieGenresUrl = this.store.apiUrl + this.store.endpoint.genreMovie;
-      return axios.get(movieGenresUrl, { params: this.store.apiParam })
+      const api_key = '79822ad1ecd0e1c275a39196556cb1e3'
+      return axios.get(movieGenresUrl + '?api_key=' + api_key)
     },
 
     getGenresSeries() {
       const seriesGenresUrl = this.store.apiUrl + this.store.endpoint.genreSeries;
-      return axios.get(seriesGenresUrl, { params: this.store.apiParam })
+      const api_key = '79822ad1ecd0e1c275a39196556cb1e3'
+      return axios.get(seriesGenresUrl + '?api_key=' + api_key)
     },
 
     getGenreList() {

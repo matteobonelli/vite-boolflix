@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { store } from '../../assets/data/store'
 export default {
     name: 'PostersComponent',
