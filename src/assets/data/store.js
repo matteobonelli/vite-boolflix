@@ -11,6 +11,8 @@ export const store = reactive({
         genreSeries: 'genre/tv/list',
         discoverMovie: 'discover/movie',
         discoverSeries: 'discover/tv',
+        topRatedMovies: 'movie/top_rated',
+        topRatedSeries: 'tv/top_rated'
     },
     params: {
         api_key: '79822ad1ecd0e1c275a39196556cb1e3',
@@ -30,5 +32,9 @@ export const store = reactive({
     genreSeriesList: [],
     bestMovies: false,
     genreList: [],
-    videoOn: false
+    videoOn: false,
+    topMovies: [],
+    topSeries: [],
+    popularMovies: [],
+    popularSeries: []
 })

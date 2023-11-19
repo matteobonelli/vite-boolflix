@@ -1,6 +1,6 @@
 <template>
-    <div class="card-poster" @mouseover="hover = true" @mouseleave="hover = false">
-        <div class="card-inner">
+    <div class="card-poster" @click="checkClick" :class="{ 'card-hover': !clicked }" @mouseleave="clicked = false">
+        <div class="card-inner" :class="{ 'flip-card': clicked }">
             <div class="h-100 card-front">
                 <img v-if="image !== null" :src="store.imgUrl + image" :alt="title || name" class="w-100 h-100">
                 <div v-else class="d-flex justify-content-center align-items-center h-100">
@@ -70,11 +70,14 @@ export default {
             vote: null,
             hover: false,
             actorsList: [],
-            genreList: []
+            genreList: [],
+            clicked: false
         }
     },
     methods: {
-
+        checkClick() {
+            this.clicked = true
+        }
     },
     created() {
 
@@ -105,15 +108,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '../../assets/styles/partials/variables' as *;
+
 .card-poster {
     background-color: transparent;
-    min-width: 320px;
+    min-width: 330px;
     height: 450px;
     perspective: 1000px;
 
-    &:hover {
-        cursor: pointer;
-    }
+}
+
+.card-hover:hover {
+    cursor: pointer;
+    opacity: 0.6;
+    border: 10px solid $brand-secondary;
+    transition: 0.4s ease;
 }
 
 .card-inner {
@@ -124,7 +133,7 @@ export default {
     transform-style: preserve-3d;
 }
 
-.card-poster:hover .card-inner {
+.flip-card {
     transform: rotateY(180deg);
 }
 

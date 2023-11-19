@@ -1,8 +1,15 @@
 <template>
     <div class="container mb-5">
-        <h2 class="text-light display-5 fw-bold mb-3">Serie TV</h2>
-        <div class="d-flex justify-content-center flex-wrap">
-            <PostersComponent v-for="serie in store.seriesList" @click="getActorsSeries(serie)"
+        <h2 class="text-light display-5 fw-bold mb-3" v-if="store.bestMovies">Migliori Serie TV</h2>
+        <h2 class="text-light display-5 fw-bold mb-3" v-else>Serie TV</h2>
+        <div class="d-flex justify-content-center align-items-center right-arrow" @click="scrollRight">
+            <i class="fa-solid fa-chevron-right"></i>
+        </div>
+        <div class="d-flex justify-content-center align-items-center left-arrow" @click="scrollLeft">
+            <i class="fa-solid fa-chevron-left"></i>
+        </div>
+        <div class="d-flex overflow-hidden" ref="movieScroller">
+            <PostersComponent v-for="serie in store.popularSeries" @click="getActorsSeries(serie)"
                 @dblclick="$emit('playVideos', serie.id)" :name="serie.name" :image="serie.poster_path"
                 :original-name="serie.original_name" :rating="serie.vote_average" :language="serie.original_language"
                 :overview="serie.overview" :genreids="serie.genre_ids" :cast="serie.cast" />
@@ -15,7 +22,7 @@ import axios from 'axios'
 import { store } from '../assets/data/store'
 import PostersComponent from './posters/PostersComponent.vue';
 export default {
-    name: 'SeriesComponent',
+    name: 'BestSeriesComponent',
     components: {
         PostersComponent
     },
@@ -28,6 +35,7 @@ export default {
     methods: {
         getActorsSeries(serie) {
             if (serie.cast && serie.cast.length > 0) {
+                this.actors = []
                 return
             }
             this.actors = []
@@ -53,6 +61,12 @@ export default {
             })
 
         },
+        scrollRight() {
+            this.$refs.movieScroller.scrollBy({ left: 1320, behavior: 'smooth' })
+        },
+        scrollLeft() {
+            this.$refs.movieScroller.scrollBy({ left: -1320, behavior: 'smooth' })
+        },
     }
 }
 </script>
@@ -61,5 +75,43 @@ export default {
 .container {
     max-width: 1344px !important;
     position: relative !important;
+}
+
+.right-arrow {
+    color: rgba($color: #ffffff, $alpha: 0.4);
+    font-size: 5vw;
+    position: absolute;
+    z-index: 1000;
+    cursor: pointer;
+    height: 150px;
+    width: 150px;
+    background-color: rgba($color: #000000, $alpha: 0.4);
+    border-radius: 50%;
+    right: -15%;
+    bottom: 30%;
+
+    &:hover {
+        color: white;
+        background-color: black;
+    }
+}
+
+.left-arrow {
+    color: rgba($color: #ffffff, $alpha: 0.4);
+    font-size: 5vw;
+    position: absolute;
+    z-index: 1000;
+    cursor: pointer;
+    height: 150px;
+    width: 150px;
+    background-color: rgba($color: #000000, $alpha: 0.4);
+    border-radius: 50%;
+    left: -15%;
+    bottom: 30%;
+
+    &:hover {
+        color: white;
+        background-color: black;
+    }
 }
 </style>

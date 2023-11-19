@@ -8,14 +8,26 @@
         <iframe width="1200" height="500" :src="'https://www.youtube.com/embed/' + youtubeKey + '?autoplay=1&mute=1'">
         </iframe>
       </div>
-      <section id="movies" class="mb-4" v-if="store.movieList.length > 0">
+      <section id="movies" class="mt-3" v-if="store.movieList.length > 0">
         <MovieComponent @play-videom="startVideoMovie" />
       </section>
-      <section id="series" v-if="store.seriesList.length > 0">
+      <section id="series" class="mt-3" v-if="store.seriesList.length > 0">
         <SeriesComponent @play-videos="startVideoSerie" />
       </section>
+      <section id="bestmovies" class="mt-3" v-if="store.popularMovies.length > 0">
+        <BestMovieComponent @play-videom="startVideoMovie" />
+      </section>
+      <section id="bestseries" v-if="store.popularSeries.length > 0">
+        <BestSeriesComponent @play-videos="startVideoSerie" />
+      </section>
+      <section id="topMovies" v-if="store.topMovies.length > 0">
+        <TopRatedMovies @play-videom="startVideoMovie" />
+      </section>
+      <section id="topSeries" v-if="store.topSeries.length > 0">
+        <TopRatedTv @play-videos="startVideoSerie" />
+      </section>
       <div class="nofilm d-flex justify-content-center align-items-center"
-        v-if="store.movieList.length === 0 && store.seriesList.length === 0">
+        v-if="store.movieList.length === 0 && store.seriesList.length === 0 && store.popularMovies.length === 0">
         <h1 class="text-light">Non sono presenti Film o Serie TV!</h1>
       </div>
     </div>
@@ -23,19 +35,27 @@
 </template>
 
 <script>
-import LoadingComponent from './components/LoadingComponent.vue'
 import SeriesComponent from './components/SeriesComponent.vue'
 import MovieComponent from './components/MovieComponent.vue'
+import TopRatedTv from './components/TopRatedTv.vue'
+import LoadingComponent from './components/LoadingComponent.vue'
+import BestSeriesComponent from './components/BestSeriesComponent.vue'
+import BestMovieComponent from './components/BestMovieComponent.vue'
 import HeaderComponent from './components/HeaderComponent.vue'
 import axios from 'axios'
 import { store } from './assets/data/store'
+import TopRatedMovies from './components/TopRatedMovies.vue'
 export default {
   name: 'App',
   components: {
     HeaderComponent,
+    BestMovieComponent,
+    BestSeriesComponent,
+    LoadingComponent,
+    TopRatedMovies,
+    TopRatedTv,
     MovieComponent,
-    SeriesComponent,
-    LoadingComponent
+    SeriesComponent
   },
   data() {
     return {
@@ -52,6 +72,10 @@ export default {
       } else if (val === '') {
         return
       } else {
+        store.popularMovies = []
+        store.popularSeries = []
+        store.topMovies = []
+        store.topSeries = []
         store.videoOn = false
         this.youtubeKey = ''
         this.loading = true
@@ -102,6 +126,10 @@ export default {
 
     },
     getQuery(val) {
+      store.popularMovies = []
+      store.popularSeries = []
+      store.topMovies = []
+      store.topSeries = []
       store.videoOn = false
       this.youtubeKey = ''
       this.loading = true
@@ -174,21 +202,22 @@ export default {
     },
 
     getPopularFilmsAndSeries() {
+      store.movieList = []
+      store.seriesList = []
       store.videoOn = false
       this.youtubeKey = ''
-      const url = store.apiUrl + store.endpoint.popularMovies
-      const url2 = store.apiUrl + store.endpoint.popularSeries
-      axios.get(url, { params: store.params }).then((res) => {
-        this.store.movieList = res.data.results
-      }).catch((error) => {
-        console.log(error)
-      }).finally(() => {
-        this.loading = false
-        store.bestMovies = true
-      });
-      axios.get(url2, { params: store.params }).then((res) => {
-        this.store.seriesList = res.data.results
-      }).catch((error) => {
+      let endpoints = [
+        store.apiUrl + store.endpoint.popularMovies,
+        store.apiUrl + store.endpoint.popularSeries,
+        store.apiUrl + store.endpoint.topRatedMovies,
+        store.apiUrl + store.endpoint.topRatedSeries,
+      ]
+      axios.all(endpoints.map((endpoint) => axios.get(endpoint, { params: store.params }))).then(axios.spread((popMovies, popSeries, topMovies, topSeries) => {
+        store.popularMovies = popMovies.data.results
+        store.popularSeries = popSeries.data.results
+        store.topMovies = topMovies.data.results
+        store.topSeries = topSeries.data.results
+      })).catch((error) => {
         console.log(error)
       }).finally(() => {
         this.loading = false
@@ -215,6 +244,7 @@ export default {
 @use './assets/styles/partials/variables' as *;
 
 main {
+  font-family: 'Martel Sans', sans-serif;
   overflow-y: auto;
   height: calc(100vh - 80px);
   background-color: $brand_primary;
@@ -223,6 +253,9 @@ main {
 
 .nofilm {
   height: calc(100vh - 160px);
-  ;
+}
+
+section {
+  margin-bottom: 100px;
 }
 </style>

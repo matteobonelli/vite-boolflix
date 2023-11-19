@@ -2,11 +2,18 @@
     <div class="container mb-5">
         <div class="d-flex justify-content-between align-items-center ">
             <div>
-                <h2 class="text-light display-5 fw-bold mb-3">Film</h2>
+                <h2 class="text-light display-5 fw-bold mb-3" v-if="store.bestMovies">I film più votati</h2>
+                <h2 class="text-light display-5 fw-bold mb-3" v-else>Film</h2>
             </div>
         </div>
-        <div class="d-flex justify-content-center flex-wrap">
-            <PostersComponent v-for="movie in store.movieList" @click="getActorsMovies(movie)"
+        <div class="d-flex justify-content-center align-items-center right-arrow" @click="scrollRight">
+            <i class="fa-solid fa-chevron-right"></i>
+        </div>
+        <div class="d-flex justify-content-center align-items-center left-arrow" @click="scrollLeft">
+            <i class="fa-solid fa-chevron-left"></i>
+        </div>
+        <div class="d-flex overflow-hidden" ref="movieScroller">
+            <PostersComponent v-for="movie in store.topMovies" @click="getActorsMovies(movie)"
                 @dblclick="$emit('playVideom', movie.id)" :title="movie.title" :image="movie.poster_path"
                 :original-title="movie.original_title" :language="movie.original_language" :rating="movie.vote_average"
                 :overview="movie.overview" :genreids="movie.genre_ids" :cast="movie.cast" />
@@ -33,6 +40,7 @@ export default {
     methods: {
         getActorsMovies(movie) {
             if (movie.cast && movie.cast.length > 0) {
+                this.actors = []
                 return
             }
             this.actors = []
@@ -59,6 +67,12 @@ export default {
             })
 
         },
+        scrollRight() {
+            this.$refs.movieScroller.scrollBy({ left: 1320, behavior: 'smooth' })
+        },
+        scrollLeft() {
+            this.$refs.movieScroller.scrollBy({ left: -1320, behavior: 'smooth' })
+        },
     }
 }
 </script>
@@ -67,5 +81,43 @@ export default {
 .container {
     max-width: 1344px !important;
     position: relative !important;
+}
+
+.right-arrow {
+    color: rgba($color: #ffffff, $alpha: 0.4);
+    font-size: 5vw;
+    position: absolute;
+    z-index: 1000;
+    cursor: pointer;
+    height: 150px;
+    width: 150px;
+    background-color: rgba($color: #000000, $alpha: 0.4);
+    border-radius: 50%;
+    right: -15%;
+    bottom: 30%;
+
+    &:hover {
+        color: white;
+        background-color: black;
+    }
+}
+
+.left-arrow {
+    color: rgba($color: #ffffff, $alpha: 0.4);
+    font-size: 5vw;
+    position: absolute;
+    z-index: 1000;
+    cursor: pointer;
+    height: 150px;
+    width: 150px;
+    background-color: rgba($color: #000000, $alpha: 0.4);
+    border-radius: 50%;
+    left: -15%;
+    bottom: 30%;
+
+    &:hover {
+        color: white;
+        background-color: black;
+    }
 }
 </style>
